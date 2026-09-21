@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Memphis — Dashboard</title>
+<style>
+body{font-family:system-ui;background:#111;color:#eee;margin:0}main{max-width:1100px;margin:auto;padding:24px}
+.card{background:#1b1b1b;border:1px solid #333;border-radius:14px;padding:18px;margin-bottom:14px}
+.item{border-top:1px solid #333;padding:14px 0}.pill{padding:5px 9px;border-radius:99px;background:#333}
+button{margin-right:6px;padding:8px 11px;border:0;border-radius:7px;cursor:pointer}
+small{color:#aaa}
+</style></head><body><main>
+<h1>Memphis AI Receptionist</h1>
+<p><small>Richieste ricevute da AI / telefono / WhatsApp</small></p>
+<div class="card">
+<h2>Configura disponibilità</h2>
+<p><small>Qui il Memphis inserisce gli slot realmente disponibili. Il sistema non inventa capienza o tavoli.</small></p>
+<input id="day" placeholder="2026-09-26">
+<input id="time" placeholder="21:00">
+<select id="room"><option>sala principale</option><option>sala fumatori</option><option>soppalco</option></select>
+<input id="cap" type="number" min="1" placeholder="posti disponibili">
+<button onclick="addSlot()">Aggiungi slot</button>
+<div id="slots"></div>
+</div>
+<div id="list" class="card">Caricamento...</div>
+<div class="card"><h2>Ordini asporto / domicilio</h2><div id="orders">Caricamento...</div></div>
+<script>
+async function loadSlots(){
+ const r=await fetch('/api/availability'); const rows=await r.json();
+ document.getElementById('slots').innerHTML=rows.length ? rows.map(x=>
+ `<div class="item">#${x.id} · ${x.day} ${x.time} · ${x.room} · ${x.booked}/${x.capacity}
+ <button onclick="toggleSlot(${x.id},${x.active?0:1})">${x.active?'Disattiva':'Attiva'}</button></div>`).join('') : 'Nessuno slot configurato.';
+}
+async function addSlot(){
+ const body={day:day.value,time:time.value,room:room.value,capacity:Number(cap.value)};
+ await fetch('/api/availability',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+ cap.value=''; loadSlots();
+}
+async function toggleSlot(id,active){
+ await fetch('/api/availability/'+id+'/toggle',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({active:!!active})});
+ loadSlots();
+}
+async function load(){
+ const r=await fetch('/api/requests'); const rows=await r.json();
+ const box=document.getElementById('list');
+ if(!rows.length){box.textContent='Nessuna richiesta.';return}
+ box.innerHTML=rows.map(x=>`
+ <div class="item">
+ <b>#${x.id} · ${x.type||'richiesta'}</b> <span class="pill">${x.status}</span>
+${x.customer_confirmed?' <span class="pill">CLIENTE OK</span>':' <span class="pill">CLIENTE NON CONFERMATO</span>'}
+${x.payment_status && x.payment_status!=='NON_RICHIESTO' ? ' <span class="pill">PAGAMENTO: '+x.payment_status+'</span>' : ''}<br>
+ ${x.name||'Nome non inserito'} · ${x.people||'-'} persone · ${x.day||'-'} ${x.time||''} · ${x.room||''}<br>
+ ${x.address||''}<br><small>${x.channel} · ${x.created_at}</small><br><br>
+ <button onclick="confirmReservation(${x.id})">Conferma prenotazione</button>
+ <button onclick="setStatus(${x.id},'CONFERMATA')">Conferma manuale</button>
+ <button onclick="setStatus(${x.id},'RIFIUTATA')">Rifiuta</button>
+ <button onclick="setStatus(${x.id},'CHIUSA')">Chiudi</button>
+ </div>`).join('');
+}
+async function setStatus(id,status){
+ await fetch('/api/requests/'+id+'/status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})});
+ load();
+}
+async function confirmReservation(id){
+ const r=await fetch('/api/requests/'+id+'/confirm-reservation',{method:'POST'});
+ const x=await r.json(); alert(x.status||x.error); loadSlots(); load();
+}
+async function loadOrders(){
+ const r=await fetch('/api/orders'); const rows=await r.json();
+ const box=document.getElementById('orders');
+ if(!rows.length){box.textContent='Nessun ordine.';return}
+ box.innerHTML=rows.map(x=>`
+ <div class="item">
+ <b>#${x.id} · ${x.service}</b> <span class="pill">${x.status}</span>
+${x.customer_confirmed?' <span class="pill">CLIENTE OK</span>':' <span class="pill">CLIENTE NON CONFERMATO</span>'}
+${x.payment_status && x.payment_status!=='NON_RICHIESTO' ? ' <span class="pill">PAGAMENTO: '+x.payment_status+'</span>' : ''}<br>
+ <b>${x.name}</b> · ${x.desired_time}<br>
+ ${x.address||'Ritiro al locale'}<br>
+ ${Array.isArray(x.items)?x.items.map(i=>`${i.quantity||1}× ${i.name||i.product||'prodotto'}${i.modifications?' — '+i.modifications:''}`).join('<br>'):x.items}<br>
+ <small>${x.channel} · ${x.created_at}</small><br><br>
+ <button onclick="editOrder(${x.id})">Modifica ordine</button>
+ <button onclick="orderStatus(${x.id},'CONFERMATO')">Conferma Memphis</button>
+<button onclick="requestPayment(${x.id})">Richiedi pagamento</button>
+<button onclick="markPaid(${x.id})">Segna pagato</button>
+ <button onclick="orderStatus(${x.id},'IN_PREPARAZIONE')">In preparazione</button>
+ <button onclick="orderStatus(${x.id},'PRONTO')">Pronto</button>
+ <button onclick="orderStatus(${x.id},'RITIRATO')">Ritirato</button>
+ <button onclick="orderStatus(${x.id},'CONSEGNATO')">Consegnato</button>
+ <button onclick="orderStatus(${x.id},'RIFIUTATO')">Rifiuta</button>
+ </div>`).join('');
+}
+async function editOrder(id){
+ const r=await fetch('/api/orders'); const rows=await r.json(); const x=rows.find(a=>a.id===id);
+ if(!x)return;
+ const text=prompt("Inserisci modifiche in formato JSON items, es. [{\"name\":\"Margherita\",\"quantity\":2}]",JSON.stringify(x.items));
+ if(!text)return;
+ try{
+   const items=JSON.parse(text);
+   await fetch('/api/orders/'+id+'/edit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items})});
+   loadOrders();
+ }catch(e){alert("JSON non valido")}
+}
+async function orderStatus(id,status){
+ await fetch('/api/orders/'+id+'/status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})});
+ loadOrders();
+}
+loadSlots(); load(); loadOrders(); setInterval(load,5000); setInterval(loadOrders,5000);
+
+async function requestPayment(id){
+  const r=await fetch(`/api/orders/${id}/payment-request`,{method:'POST'});
+  const d=await r.json();
+  alert(d.error || 'Pagamento richiesto.');
+  if(typeof loadOrders==='function') loadOrders();
+}
+async function markPaid(id){
+  const method=prompt('Metodo: CONTANTI, POS oppure ONLINE','POS');
+  if(!method) return;
+  const reference=prompt('Riferimento pagamento (opzionale):','') || '';
+  const r=await fetch(`/api/orders/${id}/payment`,{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({payment_method:method.toUpperCase(),payment_reference:reference})
+  });
+  const d=await r.json();
+  alert(d.error || 'Pagamento registrato.');
+  if(typeof loadOrders==='function') loadOrders();
+}
+</script></main></body></html>

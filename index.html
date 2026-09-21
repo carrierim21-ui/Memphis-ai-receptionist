@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Memphis AI Receptionist</title>
+<style>
+body{font-family:system-ui;margin:0;background:#111;color:#eee}
+header{padding:20px;border-bottom:1px solid #333}
+main{max-width:900px;margin:auto;padding:20px}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:20px}
+.card{background:#1b1b1b;border:1px solid #333;border-radius:14px;padding:16px}
+.chat{height:55vh;overflow:auto;background:#0d0d0d;padding:14px;border-radius:10px}
+.msg{padding:10px 12px;margin:8px 0;border-radius:12px;white-space:pre-wrap}
+.u{background:#333}.a{background:#202020}
+.row{display:flex;gap:8px;margin-top:10px}
+input{flex:1;padding:13px;border-radius:9px;border:1px solid #444;background:#111;color:#fff}
+button{padding:12px 16px;border:0;border-radius:9px;cursor:pointer}
+small{color:#aaa}
+</style>
+</head>
+<body>
+<header><strong>Memphis AI Receptionist — MVP</strong><br><small>Memphis Pub · Bernalda</small></header>
+<main><div class="grid">
+<section class="card">
+<div id="chat" class="chat"></div>
+<div class="row">
+<input id="q" placeholder="Es. Avete la Diavola? / Vorrei prenotare...">
+<button onclick="send()">Invia</button>
+</div>
+</section>
+<aside class="card">
+<h3>Funzioni attive</h3>
+<ul>
+<li>Menu Memphis</li><li>Prenotazioni</li><li>Asporto</li>
+<li>Domicilio</li><li>Allergie → verifica</li>
+<li>Webhook telefono</li><li>Webhook WhatsApp</li>
+</ul>
+<p><small>Le richieste operative vengono salvate come DA_VERIFICARE. Nessuna richiesta viene dichiarata confermata senza verifica reale.</small></p>
+</aside>
+</div></main>
+<script>
+const c=document.getElementById('chat'),q=document.getElementById('q');
+function add(t,k){const d=document.createElement('div');d.className='msg '+k;d.textContent=t;c.appendChild(d);c.scrollTop=c.scrollHeight}
+add("Ciao, Memphis Pub. Come posso aiutarti?","a");
+async function send(){
+  const m=q.value.trim(); if(!m)return;
+  add(m,"u"); q.value="";
+  const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:m})});
+  const j=await r.json(); add(j.reply,"a");
+}
+q.addEventListener('keydown',e=>{if(e.key==='Enter')send()});
+</script>
+
+<hr>
+<section style="max-width:760px;margin:30px auto;padding:20px;border:1px solid #ddd;border-radius:14px">
+<h2>Test conversazione ordine</h2>
+<div id="chatlog" style="min-height:180px;padding:10px;background:#f7f7f7;border-radius:10px"></div>
+<input id="msg" style="width:75%;padding:12px" placeholder="Es. Vorrei 2 Margherite da asporto alle 21">
+<button onclick="sendMsg()">Invia</button>
+<script>
+const sid="test-"+Math.random().toString(36).slice(2);
+async function sendMsg(){
+ const el=document.getElementById('msg'); const m=el.value.trim(); if(!m)return;
+ document.getElementById('chatlog').innerHTML += `<p><b>Tu:</b> ${m}</p>`;
+ el.value='';
+ const r=await fetch('/api/conversation',{method:'POST',headers:{'Content-Type':'application/json'},
+ body:JSON.stringify({session_id:sid,channel:'web',message:m})});
+ const x=await r.json();
+ document.getElementById('chatlog').innerHTML += `<p><b>Memphis AI:</b> ${x.reply}</p>`;
+}
+</script>
+</section>
+</body></html>

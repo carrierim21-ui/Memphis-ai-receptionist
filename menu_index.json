@@ -1,0 +1,1014 @@
+{
+  "count": 200,
+  "categories": [
+    "bevande",
+    "cocktail",
+    "panini_gourmet",
+    "piatti",
+    "pizze",
+    "pizze_speciali",
+    "stuzzicheria"
+  ],
+  "items": [
+    {
+      "name": "Bella Napoli",
+      "category": "pizze",
+      "price_eur": 7
+    },
+    {
+      "name": "Biancaneve",
+      "category": "pizze",
+      "price_eur": 5
+    },
+    {
+      "name": "Cuor di Provola",
+      "category": "pizze",
+      "price_eur": 8.5
+    },
+    {
+      "name": "Bufalina",
+      "category": "pizze",
+      "price_eur": 8
+    },
+    {
+      "name": "Bufala",
+      "category": "pizze",
+      "price_eur": 6.5
+    },
+    {
+      "name": "Bufala & Crudo",
+      "category": "pizze",
+      "price_eur": 8.5
+    },
+    {
+      "name": "Bufala & Porcini",
+      "category": "pizze",
+      "price_eur": 9
+    },
+    {
+      "name": "Bresaola",
+      "category": "pizze",
+      "price_eur": 9
+    },
+    {
+      "name": "Capricciosa",
+      "category": "pizze",
+      "price_eur": 8
+    },
+    {
+      "name": "Prosciutto Cotto",
+      "category": "pizze",
+      "price_eur": 6.5
+    },
+    {
+      "name": "Prosciutto & Funghi",
+      "category": "pizze",
+      "price_eur": 7
+    },
+    {
+      "name": "Prosciutto & Salame",
+      "category": "pizze",
+      "price_eur": 7.5
+    },
+    {
+      "name": "Quattro Formaggi",
+      "category": "pizze",
+      "price_eur": 8
+    },
+    {
+      "name": "Quattro Stagioni",
+      "category": "pizze",
+      "price_eur": 7.5
+    },
+    {
+      "name": "Romana",
+      "category": "pizze",
+      "price_eur": 6.5
+    },
+    {
+      "name": "Diavola",
+      "category": "pizze",
+      "price_eur": 6.5
+    },
+    {
+      "name": "Margherita",
+      "category": "pizze",
+      "price_eur": 5
+    },
+    {
+      "name": "Marinara",
+      "category": "pizze",
+      "price_eur": 4
+    },
+    {
+      "name": "Memphis",
+      "category": "pizze",
+      "price_eur": 8
+    },
+    {
+      "name": "Napoletana",
+      "category": "pizze",
+      "price_eur": 5.5
+    },
+    {
+      "name": "Pizza Carmine",
+      "category": "pizze",
+      "price_eur": 9
+    },
+    {
+      "name": "Friarielli",
+      "category": "pizze",
+      "price_eur": 9.5
+    },
+    {
+      "name": "Pizza Pane",
+      "category": "pizze",
+      "price_eur": 3
+    },
+    {
+      "name": "Porchetta",
+      "category": "pizze",
+      "price_eur": 9.5
+    },
+    {
+      "name": "Frutti di Mare",
+      "category": "pizze",
+      "price_eur": 8.5
+    },
+    {
+      "name": "Salame & Funghi",
+      "category": "pizze",
+      "price_eur": 7
+    },
+    {
+      "name": "Salsiccia Fresca",
+      "category": "pizze",
+      "price_eur": 7
+    },
+    {
+      "name": "Salsiccia Fresca & Funghi",
+      "category": "pizze",
+      "price_eur": 7.5
+    },
+    {
+      "name": "Panna & Gamberetti",
+      "category": "pizze",
+      "price_eur": 8.5
+    },
+    {
+      "name": "San Daniele",
+      "category": "pizze",
+      "price_eur": 7
+    },
+    {
+      "name": "Tonno & Cipolla",
+      "category": "pizze",
+      "price_eur": 7
+    },
+    {
+      "name": "Crudaiola",
+      "category": "pizze",
+      "price_eur": 8.5
+    },
+    {
+      "name": "Vegetariana",
+      "category": "pizze",
+      "price_eur": 8
+    },
+    {
+      "name": "Wurstel",
+      "category": "pizze",
+      "price_eur": 6
+    },
+    {
+      "name": "Wurstel & Patatine",
+      "category": "pizze",
+      "price_eur": 7
+    },
+    {
+      "name": "Calzone",
+      "category": "pizze",
+      "price_eur": 5
+    },
+    {
+      "name": "Patate & Porcini",
+      "category": "pizze",
+      "price_eur": 9
+    },
+    {
+      "name": "Patate & Pancetta",
+      "category": "pizze",
+      "price_eur": 8
+    },
+    {
+      "name": "Capocollo & Pomodorini",
+      "category": "pizze",
+      "price_eur": 8
+    },
+    {
+      "name": "Cardoncelli & Capocollo",
+      "category": "pizze",
+      "price_eur": 11
+    },
+    {
+      "name": "Pizza Fritta",
+      "category": "pizze",
+      "price_eur": 7
+    },
+    {
+      "name": "Bufala 'Nduja",
+      "category": "pizze",
+      "price_eur": 8
+    },
+    {
+      "name": "Panna & Salmone Affumicato",
+      "category": "pizze",
+      "price_eur": 9.5
+    },
+    {
+      "name": "Zucchine & Pancetta",
+      "category": "pizze",
+      "price_eur": 9
+    },
+    {
+      "name": "Bufala & Pomodori Secchi",
+      "category": "pizze_speciali",
+      "price_eur": 9
+    },
+    {
+      "name": "Baccalà & Peperoni",
+      "category": "pizze_speciali",
+      "price_eur": 11
+    },
+    {
+      "name": "Mortadella & Crema di Pistacchio",
+      "category": "pizze_speciali",
+      "price_eur": 9.5
+    },
+    {
+      "name": "Pere & Noci",
+      "category": "pizze_speciali",
+      "price_eur": 9
+    },
+    {
+      "name": "Salsiccia & Cardoncelli",
+      "category": "pizze_speciali",
+      "price_eur": 11
+    },
+    {
+      "name": "Datterino Giallo & Tonno Affumicato",
+      "category": "pizze_speciali",
+      "price_eur": 10
+    },
+    {
+      "name": "Estate Italiana",
+      "category": "pizze_speciali",
+      "price_eur": 9
+    },
+    {
+      "name": "Burrata & Pesce Spada",
+      "category": "pizze_speciali",
+      "price_eur": 11
+    },
+    {
+      "name": "Alici & Burrata",
+      "category": "pizze_speciali",
+      "price_eur": 11.5
+    },
+    {
+      "name": "Lime & Salmone",
+      "category": "pizze_speciali",
+      "price_eur": 11.5
+    },
+    {
+      "name": "Parmigiana",
+      "category": "pizze_speciali",
+      "price_eur": 10
+    },
+    {
+      "name": "Alicette",
+      "category": "pizze_speciali",
+      "price_eur": 10
+    },
+    {
+      "name": "Smashing Pumpkins",
+      "category": "pizze_speciali",
+      "price_eur": 10
+    },
+    {
+      "name": "Rape & Mollica",
+      "category": "pizze_speciali",
+      "price_eur": 11
+    },
+    {
+      "name": "Leggera",
+      "category": "pizze_speciali",
+      "price_eur": 10
+    },
+    {
+      "name": "44 MAGNUM",
+      "category": "panini_gourmet",
+      "price_eur": 16
+    },
+    {
+      "name": "GOURMET BB KING",
+      "category": "panini_gourmet",
+      "price_eur": 11
+    },
+    {
+      "name": "INUIT BURGER",
+      "category": "panini_gourmet",
+      "price_eur": 8
+    },
+    {
+      "name": "COUNTRY WILLIAMS",
+      "category": "panini_gourmet",
+      "price_eur": 8
+    },
+    {
+      "name": "TREEPLO SMASH",
+      "category": "panini_gourmet",
+      "price_eur": 14
+    },
+    {
+      "name": "PULLED SPECIAL",
+      "category": "panini_gourmet",
+      "price_eur": 8
+    },
+    {
+      "name": "SOUTH BURGER",
+      "category": "panini_gourmet",
+      "price_eur": 9
+    },
+    {
+      "name": "GOURMET USA",
+      "category": "panini_gourmet",
+      "price_eur": 8
+    },
+    {
+      "name": "GOURMET ITALIA",
+      "category": "panini_gourmet",
+      "price_eur": 9
+    },
+    {
+      "name": "NORTH AMERICA",
+      "category": "panini_gourmet",
+      "price_eur": 13
+    },
+    {
+      "name": "BURLY",
+      "category": "panini_gourmet",
+      "price_eur": 14
+    },
+    {
+      "name": "BURGER WAGYU",
+      "category": "panini_gourmet",
+      "price_eur": 14
+    },
+    {
+      "name": "JOHN WAYNE",
+      "category": "panini_gourmet",
+      "price_eur": 11
+    },
+    {
+      "name": "Antipasto Bufala e Crudo",
+      "category": "piatti",
+      "price_eur": 6
+    },
+    {
+      "name": "Antipasto Salumi e Formaggi",
+      "category": "piatti",
+      "price_eur": 8
+    },
+    {
+      "name": "Carpaccio di Bresaola",
+      "category": "piatti",
+      "price_eur": 8
+    },
+    {
+      "name": "Carpaccio di Salmone Affumicato",
+      "category": "piatti",
+      "price_eur": 10
+    },
+    {
+      "name": "Carpaccio di Tonno Affumicato",
+      "category": "piatti",
+      "price_eur": 12
+    },
+    {
+      "name": "Carpaccio di Spada Affumicato",
+      "category": "piatti",
+      "price_eur": 12
+    },
+    {
+      "name": "Frittura di Calamari",
+      "category": "piatti",
+      "price_eur": 13
+    },
+    {
+      "name": "Spiedini di Pollo 300g",
+      "category": "piatti",
+      "price_eur": 8
+    },
+    {
+      "name": "Nashville Stick",
+      "category": "piatti",
+      "price_eur": 6
+    },
+    {
+      "name": "English Dish",
+      "category": "piatti",
+      "price_eur": 8.5
+    },
+    {
+      "name": "Chicken Strips",
+      "category": "piatti",
+      "price_eur": 7.5
+    },
+    {
+      "name": "Fish & Chips",
+      "category": "piatti",
+      "price_eur": 10
+    },
+    {
+      "name": "Texan Pepper Chicken",
+      "category": "piatti",
+      "price_eur": 8
+    },
+    {
+      "name": "Entrecôte 250/300g",
+      "category": "piatti",
+      "price_eur": 14
+    },
+    {
+      "name": "Piatto Kebab",
+      "category": "piatti",
+      "price_eur": 8.5
+    },
+    {
+      "name": "Salsiccia Piccante",
+      "category": "piatti",
+      "price_eur": 7
+    },
+    {
+      "name": "Stinco di Maiale 600g",
+      "category": "piatti",
+      "price_eur": 15
+    },
+    {
+      "name": "Tagliata di Vitello 250/300g",
+      "category": "piatti",
+      "price_eur": 13
+    },
+    {
+      "name": "Spare Ribs 500g",
+      "category": "piatti",
+      "price_eur": 15
+    },
+    {
+      "name": "Verdure Grigliate",
+      "category": "piatti",
+      "price_eur": 6
+    },
+    {
+      "name": "Black Ice",
+      "category": "piatti",
+      "price_eur": 10
+    },
+    {
+      "name": "Grilled Mix",
+      "category": "piatti",
+      "price_eur": 16
+    },
+    {
+      "name": "Hamburger al piatto - Angus 200g",
+      "category": "piatti",
+      "price_eur": 6
+    },
+    {
+      "name": "Hamburger al piatto - Chianina 170g",
+      "category": "piatti",
+      "price_eur": 6
+    },
+    {
+      "name": "Hamburger al piatto - Bisonte 200g",
+      "category": "piatti",
+      "price_eur": 10
+    },
+    {
+      "name": "Hamburger al piatto - Wagyu 170g",
+      "category": "piatti",
+      "price_eur": 10
+    },
+    {
+      "name": "Hamburger al piatto - Hereford 440g",
+      "category": "piatti",
+      "price_eur": 14
+    },
+    {
+      "name": "Hamburger al piatto - Alaska Fish Burger panato",
+      "category": "piatti",
+      "price_eur": 6
+    },
+    {
+      "name": "Hamburger al piatto - Moving Mountain",
+      "category": "piatti",
+      "price_eur": 6
+    },
+    {
+      "name": "Nuggets Tyson",
+      "category": "stuzzicheria",
+      "price_eur": 4
+    },
+    {
+      "name": "Arancini di riso",
+      "category": "stuzzicheria",
+      "price_eur": 4
+    },
+    {
+      "name": "Anelli di cipolla",
+      "category": "stuzzicheria",
+      "price_eur": 4
+    },
+    {
+      "name": "Baccalà pastellato",
+      "category": "stuzzicheria",
+      "price_eur": 4.5
+    },
+    {
+      "name": "Stick di pollo",
+      "category": "stuzzicheria",
+      "price_eur": 4
+    },
+    {
+      "name": "Chele di granchio",
+      "category": "stuzzicheria",
+      "price_eur": 4
+    },
+    {
+      "name": "Crocchette di patata",
+      "category": "stuzzicheria",
+      "price_eur": 4
+    },
+    {
+      "name": "Fiori di zucca pastellati",
+      "category": "stuzzicheria",
+      "price_eur": 4
+    },
+    {
+      "name": "Mozzarelline impanate",
+      "category": "stuzzicheria",
+      "price_eur": 4
+    },
+    {
+      "name": "Mac'n Cheese Nuggets",
+      "category": "stuzzicheria",
+      "price_eur": 4.5
+    },
+    {
+      "name": "Parmigiana Bites",
+      "category": "stuzzicheria",
+      "price_eur": 4.5
+    },
+    {
+      "name": "Habanero Cheese Nuggets",
+      "category": "stuzzicheria",
+      "price_eur": 4
+    },
+    {
+      "name": "Olive all'ascolana",
+      "category": "stuzzicheria",
+      "price_eur": 4
+    },
+    {
+      "name": "Patate al forno piccola",
+      "category": "stuzzicheria",
+      "price_eur": 4
+    },
+    {
+      "name": "Patate al forno media",
+      "category": "stuzzicheria",
+      "price_eur": 5
+    },
+    {
+      "name": "Patatine fritte piccola",
+      "category": "stuzzicheria",
+      "price_eur": 3
+    },
+    {
+      "name": "Patatine fritte media",
+      "category": "stuzzicheria",
+      "price_eur": 4
+    },
+    {
+      "name": "Patatine Dippers piccola",
+      "category": "stuzzicheria",
+      "price_eur": 3.5
+    },
+    {
+      "name": "Patatine Dippers media",
+      "category": "stuzzicheria",
+      "price_eur": 4.5
+    },
+    {
+      "name": "Patate dolci fritte piccola",
+      "category": "stuzzicheria",
+      "price_eur": 5
+    },
+    {
+      "name": "Patate dolci fritte media",
+      "category": "stuzzicheria",
+      "price_eur": 6
+    },
+    {
+      "name": "Panzerottini",
+      "category": "stuzzicheria",
+      "price_eur": 4
+    },
+    {
+      "name": "Patatine a spicchi fritte & wurstel piccola",
+      "category": "stuzzicheria",
+      "price_eur": 5
+    },
+    {
+      "name": "Patatine a spicchi fritte & wurstel media",
+      "category": "stuzzicheria",
+      "price_eur": 6
+    },
+    {
+      "name": "Tortilla Chips con salsa messicana e guacamole",
+      "category": "stuzzicheria",
+      "price_eur": 3
+    },
+    {
+      "name": "Cheddar Nuggets Jalapeño",
+      "category": "stuzzicheria",
+      "price_eur": 4
+    },
+    {
+      "name": "Stick di pollo BBQ & miele",
+      "category": "stuzzicheria",
+      "price_eur": 4
+    },
+    {
+      "name": "Philadelphia Snack",
+      "category": "stuzzicheria",
+      "price_eur": 4
+    },
+    {
+      "name": "Pulled Pork Bites",
+      "category": "stuzzicheria",
+      "price_eur": 4
+    },
+    {
+      "name": "Stick speck & provola",
+      "category": "stuzzicheria",
+      "price_eur": 4.5
+    },
+    {
+      "name": "Buffalo Wings",
+      "category": "stuzzicheria",
+      "price_eur": 5
+    },
+    {
+      "name": "Crispy Wing",
+      "category": "stuzzicheria",
+      "price_eur": 5
+    },
+    {
+      "name": "Double Wings",
+      "category": "stuzzicheria",
+      "price_eur": 9
+    },
+    {
+      "name": "Frittura Mista",
+      "category": "stuzzicheria",
+      "price_eur": 20
+    },
+    {
+      "name": "Warsteiner Herb 20cl",
+      "category": "bevande",
+      "price_eur": 2.5
+    },
+    {
+      "name": "Warsteiner Herb 40cl",
+      "category": "bevande",
+      "price_eur": 4.5
+    },
+    {
+      "name": "Konig Ludwig 30cl",
+      "category": "bevande",
+      "price_eur": 4
+    },
+    {
+      "name": "Konig Ludwig 50cl",
+      "category": "bevande",
+      "price_eur": 6.5
+    },
+    {
+      "name": "Kaltenberg Schlosskeller 30cl",
+      "category": "bevande",
+      "price_eur": 4
+    },
+    {
+      "name": "Kaltenberg Schlosskeller 50cl",
+      "category": "bevande",
+      "price_eur": 6.5
+    },
+    {
+      "name": "Arbor Yakima Valley APA 33cl",
+      "category": "bevande",
+      "price_eur": 5
+    },
+    {
+      "name": "Arbor Yakima Valley APA 50cl",
+      "category": "bevande",
+      "price_eur": 7
+    },
+    {
+      "name": "Gordon Red 25cl",
+      "category": "bevande",
+      "price_eur": 3.5
+    },
+    {
+      "name": "Gordon Red 40cl",
+      "category": "bevande",
+      "price_eur": 6
+    },
+    {
+      "name": "Gordon Gold 25cl",
+      "category": "bevande",
+      "price_eur": 3.5
+    },
+    {
+      "name": "Gordon Gold 40cl",
+      "category": "bevande",
+      "price_eur": 6
+    },
+    {
+      "name": "Leffe Rituel 33cl",
+      "category": "bevande",
+      "price_eur": 5.5
+    },
+    {
+      "name": "Guinness 25cl",
+      "category": "bevande",
+      "price_eur": 4
+    },
+    {
+      "name": "Guinness 56cl",
+      "category": "bevande",
+      "price_eur": 6.5
+    },
+    {
+      "name": "Radler 25cl",
+      "category": "bevande",
+      "price_eur": 2.5
+    },
+    {
+      "name": "Radler 40cl",
+      "category": "bevande",
+      "price_eur": 4.5
+    },
+    {
+      "name": "Diesel 25cl",
+      "category": "bevande",
+      "price_eur": 2.5
+    },
+    {
+      "name": "Diesel 40cl",
+      "category": "bevande",
+      "price_eur": 4.5
+    },
+    {
+      "name": "Clausthaler 00",
+      "category": "bevande",
+      "price_eur": 6.5
+    },
+    {
+      "name": "Theresianer Gluten Free",
+      "category": "bevande",
+      "price_eur": 3
+    },
+    {
+      "name": "Tremens/Delirium",
+      "category": "bevande",
+      "price_eur": 6
+    },
+    {
+      "name": "Prior 8 St. Bernardus",
+      "category": "bevande",
+      "price_eur": 6
+    },
+    {
+      "name": "Rochefort 10",
+      "category": "bevande",
+      "price_eur": 6.5
+    },
+    {
+      "name": "Nastro Azzurro 33cl",
+      "category": "bevande",
+      "price_eur": 2.5
+    },
+    {
+      "name": "Heineken 33cl",
+      "category": "bevande",
+      "price_eur": 3
+    },
+    {
+      "name": "Beck’s 33cl",
+      "category": "bevande",
+      "price_eur": 3.5
+    },
+    {
+      "name": "Bud 33cl",
+      "category": "bevande",
+      "price_eur": 3.5
+    },
+    {
+      "name": "Ceres 33cl",
+      "category": "bevande",
+      "price_eur": 3.5
+    },
+    {
+      "name": "Corona 35.5cl",
+      "category": "bevande",
+      "price_eur": 4.5
+    },
+    {
+      "name": "Tennents 33cl",
+      "category": "bevande",
+      "price_eur": 4
+    },
+    {
+      "name": "Coca-Cola",
+      "category": "bevande",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Coca-Cola Zero",
+      "category": "bevande",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Fanta",
+      "category": "bevande",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Sprite",
+      "category": "bevande",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Peach iced tea",
+      "category": "bevande",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Lemon iced tea",
+      "category": "bevande",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Cortese Cedrata",
+      "category": "bevande",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Ginger Beer Cortese",
+      "category": "bevande",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Schweppes Tonic",
+      "category": "bevande",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Red Bull",
+      "category": "bevande",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Acqua naturale",
+      "category": "bevande",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Acqua frizzante",
+      "category": "bevande",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Pepsi alla spina",
+      "category": "bevande",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Schweppes Lemon alla spina",
+      "category": "bevande",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Tè Bio Cortese",
+      "category": "bevande",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Chinotto Bio Cortese",
+      "category": "bevande",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Campari Soda",
+      "category": "bevande",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Crodino",
+      "category": "bevande",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Hanky Panky",
+      "category": "cocktail",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Last Word",
+      "category": "cocktail",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Mary Pickford",
+      "category": "cocktail",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Rusty Nail",
+      "category": "cocktail",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Hemingway Special",
+      "category": "cocktail",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Irish Coffee",
+      "category": "cocktail",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Mai Tai",
+      "category": "cocktail",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Pisco Sour",
+      "category": "cocktail",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Dark’n’Stormy",
+      "category": "cocktail",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Illegal",
+      "category": "cocktail",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Old Cuban",
+      "category": "cocktail",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Paloma",
+      "category": "cocktail",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Suffering Bastard",
+      "category": "cocktail",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Tipperary",
+      "category": "cocktail",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Tommy’s Margarita",
+      "category": "cocktail",
+      "price_eur": "n/d"
+    },
+    {
+      "name": "Trinidad Sour",
+      "category": "cocktail",
+      "price_eur": "n/d"
+    }
+  ]
+}
