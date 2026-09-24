@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Memphis AI — Test Lab</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#0d0d0d;color:#eee;margin:0}
+main{max-width:1100px;margin:auto;padding:16px}
+a{color:#e0a526}
+.card{background:#181818;border:1px solid #333;border-radius:14px;padding:16px;margin:14px 0}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+button{padding:10px 14px;border:0;border-radius:8px;cursor:pointer;background:#2c2c2c;color:#eee}
+button.primary{background:#e0a526;color:#111;font-weight:600}
+.modes button.active{outline:2px solid #e0a526}
+input,select{padding:11px;background:#111;color:#fff;border:1px solid #444;border-radius:8px;font-size:15px}
+.chat{height:48vh;overflow:auto;background:#090909;border-radius:10px;padding:12px}
+.msg{padding:10px;margin:8px 0;border-radius:10px;white-space:pre-wrap;max-width:85%}
+.u{background:#333;margin-left:auto}.a{background:#222}.sys{color:#888;font-size:13px;text-align:center;max-width:none}
+.meta{color:#888;font-size:12px;margin-top:4px}
+.ok{color:#7ee787}.bad{color:#ff7b72}.small{color:#aaa;font-size:13px}
+#q{flex:1;min-width:200px}
+pre{background:#0a0a0a;padding:10px;border-radius:8px;overflow:auto;font-size:12px;max-height:220px}
+</style>
+</head>
+<body><main>
+<h1>Memphis AI Receptionist — Test Lab</h1>
+<p class="small">Prova il receptionist come farebbe un cliente, su ogni canale. Le richieste create qui finiscono nella <a href="/admin">dashboard</a> (sono vere: puoi rifiutarle o chiuderle).</p>
+
+<div class="card">
+  <h3>1. Canale e cliente</h3>
+  <div class="row modes">
+    <button data-m="web">Chat sito</button><button data-m="whatsapp">WhatsApp</button><button data-m="telephone">Telefono</button>
+    <label class="small">Telefono cliente <input id="phone" value="+393331234567" size="16"></label>
+    <label class="small"><input type="checkbox" id="rules"> forza motore a regole (senza IA)</label>
+    <button id="reset">Nuova conversazione</button>
+  </div>
+  <p id="modeinfo" class="small"></p>
+</div>
+
+<div class="card">
+  <h3>2. Conversazione</h3>
+  <div id="chat" class="chat"></div>
+  <div class="row" style="margin-top:10px">
+    <input id="q" placeholder="Scrivi quello che direbbe un cliente">
+    <button class="primary" id="send">Invia</button><button id="mic">🎙️ Parla</button>
+  </div>
+  <p class="small">In modalità Telefono la risposta viene letta ad alta voce; il microfono funziona su Chrome/Safari.</p>
+  <details><summary class="small">Stato della richiesta (debug)</summary><pre id="state">-</pre></details>
+</div>
+
+<div class="card">
+  <h3>3. Test automatici</h3>
+  <button class="primary" id="selftest">Esegui tutti i test</button>
+  <div id="tests"></div>
+</div>
+
+<div class="card">
+  <h3>4. Stato del sistema</h3>
+  <div id="health" class="small">Caricamento…</div>
+</div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+let mode='web', sid='testlab-'+Math.random().toString(36).slice(2);
+const chat=$('chat');
+function add(t,k,meta){const d=document.createElement('div');d.className='msg '+k;d.textContent=t;
+  if(meta){const m=document.createElement('div');m.className='meta';m.textContent=meta;d.appendChild(m)}
+  chat.appendChild(d);chat.scrollTop=chat.scrollHeight;return d}
+function setMode(m){mode=m;document.querySelectorAll('.modes button[data-m]').forEach(b=>b.classList.toggle('active',b.dataset.m===m));
+  $('modeinfo').textContent={web:'Chat del sito: la sessione è legata al browser, il telefono va chiesto al cliente.',
+  whatsapp:'WhatsApp: la conversazione è legata al numero di telefono qui sopra.',
+  telephone:'Telefono: come una chiamata; il numero del chiamante è quello qui sopra.'}[m];
+  add('— canale: '+m+' —','sys')}
+document.querySelectorAll('.modes button[data-m]').forEach(b=>b.onclick=()=>setMode(b.dataset.m));
+async function post(url,body){const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});return r.json()}
+async function send(){
+  const m=$('q').value.trim(); if(!m)return; add(m,'u'); $('q').value='';
+  const phone=$('phone').value.trim(), force_rules=$('rules').checked;
+  const url= mode==='web'?'/api/conversation': mode==='whatsapp'?'/api/channel/whatsapp':'/api/channel/voice';
+  const body= mode==='web'?{session_id:sid,message:m}:{message:m,phone,call_id:sid,force_rules};
+  if(mode==='web'&&force_rules) add('(nella chat sito il motore lo sceglie il server: usa WhatsApp/Telefono per forzare le regole)','sys');
+  const t=add('…','a');
+  try{
+    const x=await post(url,body); t.remove();
+    add(x.reply||x.detail||'Nessuna risposta','a','motore: '+(x.engine||'?')+(x.ref?' · inviata '+x.ref.type+' n.'+x.ref.id:'')+(x.handoff?' · passaggio al personale':''));
+    $('state').textContent=JSON.stringify({intent:x.intent,dati:x.draft,mancano:x.missing},null,2);
+    if(mode==='telephone'&&'speechSynthesis'in window){const u=new SpeechSynthesisUtterance(x.reply);u.lang='it-IT';speechSynthesis.speak(u)}
+  }catch(e){t.remove();add('Errore di connessione: '+e,'sys')}
+}
+$('send').onclick=send; $('q').addEventListener('keydown',e=>{if(e.key==='Enter')send()});
+$('reset').onclick=async()=>{await post('/api/test/reset',{channel:mode,session_id:sid,phone:$('phone').value.trim()});
+  sid='testlab-'+Math.random().toString(36).slice(2); chat.innerHTML=''; setMode(mode); $('state').textContent='-'};
+$('mic').onclick=()=>{const R=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!R){add('Il browser non supporta il riconoscimento vocale: scrivi il messaggio.','sys');return}
+  const r=new R();r.lang='it-IT';r.interimResults=false;r.onresult=e=>{$('q').value=e.results[0][0].transcript;send()};r.start()};
+$('selftest').onclick=async()=>{const box=$('tests');box.textContent='Esecuzione…';
+  try{const r=await fetch('/api/self-test');const x=await r.json();box.innerHTML='';
+    x.results.forEach(t=>{const p=document.createElement('p');p.className=t.ok?'ok':'bad';p.textContent=(t.ok?'✓ ':'✗ ')+t.name+(t.error?' — '+t.error:'');box.appendChild(p)});
+    loadHealth();
+  }catch(e){box.textContent='Errore: '+e}};
+async function loadHealth(){try{const h=await (await fetch('/api/health')).json();const lines=[
+  'IA: '+(h.ai.enabled?'attiva, modello '+h.ai.model:'NON attiva (manca OPENAI_API_KEY) — risponde il motore a regole'),
+  h.ai.last_error?'Ultimo errore IA ('+h.ai.last_error_at+'): '+h.ai.last_error:'',
+  'Messaggi WhatsApp/SMS ai clienti: '+(h.twilio.messages?'configurati':'non configurati'),
+  'Trasferimento chiamate al personale: '+(h.twilio.staff_transfer?'sì':'no'),
+  'Avvisi al personale per nuove richieste: '+(h.twilio.staff_alerts?'sì':'no'),
+  'Database: '+h.database];
+  $('health').innerHTML='';lines.filter(Boolean).forEach(l=>{const p=document.createElement('div');p.textContent=l;$('health').appendChild(p)})}catch(e){$('health').textContent='non disponibile'}}
+setMode('web'); loadHealth();
+</script>
+</body></html>

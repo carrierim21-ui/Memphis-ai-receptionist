@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Memphis — Dashboard</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#111;color:#eee;margin:0}
+main{max-width:1150px;margin:auto;padding:16px}
+a{color:#e0a526}
+h1{margin:6px 0}
+.card{background:#1b1b1b;border:1px solid #333;border-radius:14px;padding:16px;margin-bottom:14px}
+.item{border-top:1px solid #333;padding:12px 0}
+.item.new{background:linear-gradient(90deg,rgba(224,165,38,.12),transparent);}
+.pill{display:inline-block;padding:3px 9px;border-radius:99px;background:#333;font-size:12px;margin-left:4px}
+.pill.DA_VERIFICARE{background:#6b4e00}.pill.CONFERMATA,.pill.CONFERMATO,.pill.PRONTO,.pill.PAGATO{background:#1f5f2c}
+.pill.RIFIUTATA,.pill.RIFIUTATO{background:#6b1f1f}
+button{margin:3px 4px 3px 0;padding:8px 11px;border:0;border-radius:7px;cursor:pointer;background:#2e2e2e;color:#eee}
+button.ok{background:#2f7a3b}button.no{background:#7a2f2f}
+input,select{padding:9px;background:#111;color:#fff;border:1px solid #444;border-radius:7px}
+small,.muted{color:#aaa}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.tabs button.active{outline:2px solid #e0a526}
+.warn{background:#3a2a00;border:1px solid #6b4e00;padding:10px;border-radius:10px;margin:8px 0}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+</style>
+</head>
+<body><main>
+<div class="bar"><h1>Memphis AI Receptionist</h1><div><a href="/test">Test lab</a> · <a href="/" target="_blank">Chat clienti</a></div></div>
+<div id="status" class="muted"></div>
+
+<div class="card">
+  <div class="bar"><h2>Prenotazioni e richieste</h2>
+    <div class="tabs"><button data-f="attive" class="active">Da gestire</button><button data-f="tutte">Tutte</button></div></div>
+  <div id="list">Caricamento…</div>
+</div>
+
+<div class="card">
+  <div class="bar"><h2>Ordini asporto / domicilio</h2>
+    <div class="tabs-o"><button data-f="attivi" class="active">In corso</button><button data-f="tutti">Tutti</button></div></div>
+  <div id="orders">Caricamento…</div>
+</div>
+
+<div class="card">
+  <h2>Disponibilità tavoli</h2>
+  <p><small>Inserisci i posti realmente disponibili. Se per un giorno inserisci degli slot, l'assistente propone solo quegli orari;
+  se non inserisci nulla, ogni richiesta arriva qui come "da verificare".</small></p>
+  <div class="row">
+    <input id="day" type="date"><input id="time" type="time" value="21:00">
+    <select id="room"><option>sala principale</option><option>sala fumatori</option><option>soppalco</option></select>
+    <input id="cap" type="number" min="1" placeholder="posti" style="width:90px">
+    <button class="ok" id="addslot">Aggiungi slot</button>
+  </div>
+  <div id="slots"></div>
+</div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const euro=v=>v==null?'da verificare':'€'+Number(v).toFixed(2).replace('.',',');
+const DAYS=['dom','lun','mar','mer','gio','ven','sab'];
+const fday=s=>{if(!s)return'-';const d=new Date(s+'T12:00');return isNaN(d)?esc(s):DAYS[d.getDay()]+' '+d.getDate()+'/'+(d.getMonth()+1)};
+let reqFilter='attive', ordFilter='attivi', seenReq=new Set(), seenOrd=new Set(), first=true;
+async function api(url,body){const r=await fetch(url,body===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  let x={};try{x=await r.json()}catch(e){} if(!r.ok&&!x.error)x.error=x.detail||('errore '+r.status);return x}
+function flash(x,okMsg){if(x.error)alert(x.error);else if(x.notifica)console.log('notifica:',x.notifica);}
+
+async function loadStatus(){const h=await api('/api/health');const p=[];
+  p.push(h.ai.enabled?'IA attiva ('+esc(h.ai.model)+')':'IA non attiva: risponde il motore a regole');
+  if(h.ai.last_error)p.push('<span style="color:#ff7b72">ultimo errore IA: '+esc(h.ai.last_error)+'</span>');
+  p.push(h.twilio.messages?'messaggi ai clienti attivi':'messaggi ai clienti NON configurati (avvisa i clienti a mano)');
+  $('status').innerHTML=p.join(' · ')}
+
+async function loadRequests(){
+  const rows=await api('/api/requests');const box=$('list');
+  const list=rows.filter(x=>reqFilter==='tutte'||x.status==='DA_VERIFICARE');
+  if(!list.length){box.textContent=reqFilter==='tutte'?'Nessuna richiesta.':'Niente da gestire 👍';return}
+  box.innerHTML=list.map(x=>{
+    const isNew=!first&&!seenReq.has(x.id);
+    const title=x.type==='prenotazione'
+      ?`${esc(x.people)} persone · ${fday(x.day)} ${esc(x.time)} · ${esc(x.room==='qualsiasi'?'sala indifferente':x.room)}`
+      :x.type==='richiamata'?'Da richiamare':esc(x.type);
+    const btns=x.type==='prenotazione'
+      ?`<button class="ok" onclick="confirmRes(${x.id})">Conferma (usa slot)</button>
+        <button class="ok" onclick="setStatus(${x.id},'CONFERMATA')">Conferma senza slot</button>
+        <button class="no" onclick="setStatus(${x.id},'RIFIUTATA')">Rifiuta</button>
+        <button onclick="setStatus(${x.id},'CHIUSA')">Chiudi</button>`
+      :`<button class="ok" onclick="setStatus(${x.id},'CHIUSA')">Fatto</button>`;
+    return `<div class="item ${isNew?'new':''}"><b>#${x.id} · ${esc(x.type)}</b> <span class="pill ${esc(x.status)}">${esc(x.status)}</span><br>
+      ${title}<br><b>${esc(x.name||'')}</b> ${x.phone?`<a href="tel:${esc(x.phone)}">${esc(x.phone)}</a>`:''}
+      ${x.notes?`<br><small>Note: ${esc(x.notes)}</small>`:''}
+      <br><small>${esc(x.channel)} · ${esc(x.created_at)}${x.notified?' · notifica: '+esc(x.notified):''}</small><br>${btns}</div>`}).join('');
+  rows.forEach(x=>seenReq.add(x.id));
+}
+async function setStatus(id,status){flash(await api('/api/requests/'+id+'/status',{status}));loadRequests();loadSlots()}
+async function confirmRes(id){flash(await api('/api/requests/'+id+'/confirm-reservation',{}));loadRequests();loadSlots()}
+
+const ORDER_DONE=['CONSEGNATO','RITIRATO','CHIUSO','RIFIUTATO'];
+async function loadOrders(){
+  const rows=await api('/api/orders');const box=$('orders');
+  const list=rows.filter(x=>ordFilter==='tutti'||!ORDER_DONE.includes(x.status));
+  if(!list.length){box.textContent=ordFilter==='tutti'?'Nessun ordine.':'Nessun ordine in corso.';return}
+  box.innerHTML=list.map(x=>{
+    const isNew=!first&&!seenOrd.has(x.id);
+    const items=Array.isArray(x.items)?x.items.map(i=>`${esc(i.quantity||1)}× ${esc(i.name)}${i.modifications?' — '+esc(i.modifications):''}`).join('<br>'):esc(x.items);
+    const asporto=x.service==='asporto';
+    return `<div class="item ${isNew?'new':''}"><b>#${x.id} · ${esc(x.service)}</b> <span class="pill ${esc(x.status)}">${esc(x.status)}</span>
+      ${x.payment_status&&x.payment_status!=='NON_RICHIESTO'?`<span class="pill ${esc(x.payment_status)}">PAGAMENTO ${esc(x.payment_status)}</span>`:''}<br>
+      <b>${esc(x.name)}</b> ${x.phone?`<a href="tel:${esc(x.phone)}">${esc(x.phone)}</a>`:''} · ${fday(x.desired_day)} ore ${esc(x.desired_time)}<br>
+      ${asporto?'Ritiro al locale':'Consegna: '+esc(x.address)}<br>${items}<br>Totale prodotti: <b>${euro(x.total_eur)}</b>
+      ${x.notes?`<br><small>Note: ${esc(x.notes)}</small>`:''}
+      <br><small>${esc(x.channel)} · ${esc(x.created_at)}${x.notified?' · notifica: '+esc(x.notified):''}</small><br>
+      <button class="ok" onclick="orderStatus(${x.id},'CONFERMATO')">Conferma</button>
+      <button class="no" onclick="orderStatus(${x.id},'RIFIUTATO')">Rifiuta</button>
+      <button onclick="orderStatus(${x.id},'IN_PREPARAZIONE')">In preparazione</button>
+      <button onclick="orderStatus(${x.id},'PRONTO')">Pronto</button>
+      ${asporto?`<button onclick="orderStatus(${x.id},'RITIRATO')">Ritirato</button>`:`<button onclick="orderStatus(${x.id},'IN_CONSEGNA')">In consegna</button><button onclick="orderStatus(${x.id},'CONSEGNATO')">Consegnato</button>`}
+      <button onclick="markPaid(${x.id})">Segna pagato</button>
+      <button onclick="editOrder(${x.id})">Modifica</button></div>`}).join('');
+  rows.forEach(x=>seenOrd.add(x.id));
+}
+async function orderStatus(id,status){flash(await api('/api/orders/'+id+'/status',{status}));loadOrders()}
+async function editOrder(id){
+  const x=await api('/api/orders/'+id+'/review'); if(x.error)return alert(x.error);
+  const text=prompt('Prodotti (formato JSON). Esempio: [{"name":"Margherita","quantity":2,"modifications":"senza basilico"}]',
+    JSON.stringify(x.items.map(i=>({name:i.name,quantity:i.quantity,modifications:i.modifications||''}))));
+  if(!text)return; let items; try{items=JSON.parse(text)}catch(e){return alert('JSON non valido')}
+  flash(await api('/api/orders/'+id+'/edit',{items})); loadOrders()}
+async function markPaid(id){
+  const method=prompt('Metodo: CONTANTI, POS oppure ONLINE','POS'); if(!method)return;
+  const reference=prompt('Riferimento pagamento (opzionale):','')||'';
+  const x=await api('/api/orders/'+id+'/payment',{payment_method:method.toUpperCase(),payment_reference:reference});
+  alert(x.error||'Pagamento registrato.'); loadOrders()}
+
+async function loadSlots(){
+  const rows=await api('/api/availability');const today=new Date().toISOString().slice(0,10);
+  const list=rows.filter(x=>x.day>=today);
+  $('slots').innerHTML=list.length?list.map(x=>`<div class="item">#${x.id} · ${fday(x.day)} ${esc(x.time)} · ${esc(x.room)} ·
+    occupati ${esc(x.booked)}/${esc(x.capacity)} ${x.active?'':'<span class="pill">disattivato</span>'}
+    <button onclick="toggleSlot(${x.id},${x.active?0:1})">${x.active?'Disattiva':'Attiva'}</button>
+    <button class="no" onclick="delSlot(${x.id})">Elimina</button></div>`).join(''):'<p class="muted">Nessuno slot configurato.</p>'}
+$('addslot').onclick=async()=>{const x=await api('/api/availability',{day:$('day').value,time:$('time').value,room:$('room').value,capacity:Number($('cap').value)});
+  if(x.error)return alert(x.error); $('cap').value=''; loadSlots()};
+async function toggleSlot(id,active){await api('/api/availability/'+id+'/toggle',{active:!!active});loadSlots()}
+async function delSlot(id){if(confirm('Eliminare lo slot?')){await api('/api/availability/'+id+'/delete',{});loadSlots()}}
+
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{reqFilter=b.dataset.f;document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===b));loadRequests()});
+document.querySelectorAll('.tabs-o button').forEach(b=>b.onclick=()=>{ordFilter=b.dataset.f;document.querySelectorAll('.tabs-o button').forEach(x=>x.classList.toggle('active',x===b));loadOrders()});
+$('day').value=new Date().toISOString().slice(0,10);
+async function refresh(){await Promise.all([loadRequests(),loadOrders()]);first=false}
+loadStatus();loadSlots();refresh();setInterval(refresh,8000);setInterval(loadStatus,60000);
+</script>
+</body></html>
