@@ -2,12 +2,40 @@ services:
   - type: web
     name: memphis-ai-receptionist
     runtime: python
-    plan: free
+    # "starter" non va in sospensione e permette il disco: i dati non si perdono.
+    # Il piano "free" funziona solo per le demo (si addormenta e cancella il database).
+    plan: starter
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /api/health
+    disk:
+      name: memphis-data
+      mountPath: /var/data
+      sizeGB: 1
     envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      - key: DB_PATH
+        value: /var/data/memphis.db
+      - key: ADMIN_USER
+        value: admin
+      - key: ADMIN_PASSWORD
+        generateValue: true
       - key: OPENAI_API_KEY
         sync: false
       - key: OPENAI_MODEL
         value: gpt-5.6-luna
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_WHATSAPP_FROM
+        sync: false
+      - key: TWILIO_SMS_FROM
+        sync: false
+      - key: GROUP_MAX_AUTO
+        value: "10"
+      - key: STAFF_PHONE
+        sync: false
+      - key: STAFF_NOTIFY_PHONE
+        sync: false
